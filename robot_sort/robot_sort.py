@@ -92,12 +92,67 @@ class SortingRobot:
         """
         return self._light == "ON"
 
+   
     def sort(self):
         """
-        Sort the robot's list.
+        The None starts out on the far left and moves right.  Everything before the None
+        is sorted.  For stuff on the right of the None, we do passes right carrying the largest 
+        items and then left carrying the smallest items.  When None reaches the far
+        right, we're done. 
         """
-        # Fill this out
-        pass
+
+        while True:
+
+            # Shuffle right, taking the largest item and depositing it at the end
+            # At this point in the loop, the robot is always holding the None
+            while True:
+                # If the robot is already at the end, stop moving right
+                if not self.can_move_right():
+                    break               
+                
+                # Put down the None
+                self.swap_item()
+
+                # Move right, picking up the largest items you find
+                self.move_right()
+                if self.compare_item() < 0:
+                    self.swap_item()
+
+                # When you reach the end, put largest item down and stop moving right
+                if not self.can_move_right():
+                    self.swap_item()
+                    break
+                
+            # If the robot is carrying the None and is in the last cell, we're done.
+            if self.compare_item() is None and not self.can_move_right():
+                break
+
+
+            # Shuffle left, taking the smallest item and depositing it
+            # wherever the None is
+            while True:
+                self.move_left()
+                # When the None is reached, pick it up and stop moving left
+                if self.compare_item() is None:
+                    self.swap_item()
+                    break
+
+                # Until then, pick up the smallest items
+                if self.compare_item() > 0:
+                    self.swap_item()
+                    
+            # The robot has now put the smallest item at the position of the original None,
+            # and put the largest item at the end of the list.  The robot is carrying the None.
+            # Now the robot moves one position to the right, and we start the master loop
+            # all over again.  If the robot is already in the last cell at this point,
+            # the list is sorted.
+            if not self.move_right():
+                break
+
+            
+                
+
+
 
 
 if __name__ == "__main__":
