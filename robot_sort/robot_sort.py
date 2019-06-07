@@ -141,6 +141,8 @@ class SortingRobot:
                 if not self.move_left():
                     break
 
+
+    
                 
 
 
