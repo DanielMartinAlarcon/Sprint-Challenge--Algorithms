@@ -101,8 +101,43 @@ class SortingRobot:
         beginning.  Once it reaches the end without swapping anything,
         sorting is complete.
         """
-        set_light_on
-        while light_is_on:
+        
+        # Start out with the light on, so that it does at least one pass
+        # through the list
+        self.set_light_on()
+
+        # Loop through the list until there are no swaps 
+        # (that is, until it can go through without turning the light on)
+        while self.light_is_on():
+            # Initialize loop with light off
+            print('Beginning; light off')
+            self.set_light_off()
+
+            # Act, then move right.  If
+            while True:
+                # Actions at current position
+                print(self._position)
+                
+                # Move, and if you can't move break out
+                if not self.move_right():
+                    break
+            
+            # Actions at the end
+            print('End; Turn around')
+
+            # Return robot to the start
+            while True:
+                # Actions at current position
+                print(self._position)
+                
+                # Move, and if you can't move break out
+                if not self.move_left():
+                    break
+
+            
+            # Actions at the start, before loop reinitialization
+            print('Back to the start')
+                
 
 
 
