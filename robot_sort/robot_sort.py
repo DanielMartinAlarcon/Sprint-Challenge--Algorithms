@@ -92,147 +92,62 @@ class SortingRobot:
         """
         return self._light == "ON"
 
-    # def sort(self):
-    #     """
-    #     This is an implementation of bubble sort.  The robot will move
-    #     to the right and compare every pair of numbers, swapping each
-    #     that are out of order.  The light will turn on if any swap is
-    #     carried out.  When it reaches the end, it will go back to the 
-    #     beginning.  Once it reaches the end without swapping anything,
-    #     sorting is complete.
-    #     """
-        
-    #     # Start out with the light on, so that it does at least one pass
-    #     # through the list
-    #     self.set_light_on()
-
-    #     # Loop through the list until there are no swaps 
-    #     # (that is, until it can go through without turning the light on)
-    #     while self.light_is_on():
-    #         # Initialize loop with light off
-    #         self.set_light_off()
-
-    #         # Act, then move right.
-    #         # Robot will compare current and next positions, then move
-    #         # forward one place.
-    #         while True:
-    #             # Make sure there's at least one position in front left,
-    #             # Otherwise break out
-    #             if not self.can_move_right():
-    #                 break
-
-    #             # Evaluate items i and i+1, swap if necessary.
-    #             # Robot must start and end by holding the None item
-    #             self.swap_item() # Put down None
-    #             self.move_right()
-    #             if self.compare_item() > 0:
-    #                 self.swap_item()
-    #                 self.set_light_on() # If swap, turn light on
-    #             self.move_left()
-    #             self.swap_item() # Pick up none again
-                
-    #             # Move on
-    #             self.move_right()
-
-
-    #         # Return robot to the start
-    #         while True:
-    #             # Move, and if you can't move break out
-    #             if not self.move_left():
-    #                 break
-
-
+   
     def sort(self):
         """
-        This is an implementation of bubble sort.  The robot will move
-        to the right and compare every pair of numbers, swapping each
-        that are out of order.  The light will turn on if any swap is
-        carried out.  When it reaches the end, it will go back to the 
-        beginning.  Once it reaches the end without swapping anything,
-        sorting is complete.
+        The None starts out on the far left and moves right.  Everything before the None
+        is sorted.  For stuff on the right of the None, we do passes right carrying the largest 
+        items and then left carrying the smallest items.  When None reaches the far
+        right, we're done. 
         """
-        
-        # Start out with the light on, so that it does at least one pass
-        # through the list
-        self.set_light_on()
 
-        # Loop through the list until there are no swaps 
-        # (that is, until it can go through without turning the light on)
-        while self.light_is_on():
-            # # Initialize loop with light off
-            # self.set_light_off()
-
-            
-
+        while True:
 
             # Shuffle right, taking the largest item and depositing it at the end
+            # At this point in the loop, the robot is always holding the None
             while True:
-                print(f'i: {self._position}')
-                print(f'Robot: {self._item}')
-                print(f'Slot: {self._list[self._position]}')
-                print(self._list)
-                
-                if self.compare_item() is None and not self.can_move_right():
-                    print("We're' done!!")
-                    print()
+                # If the robot is already at the end, stop moving right
+                if not self.can_move_right():
                     break               
                 
-                if self.compare_item() is None:
-                    print('swap!')
-                    self.swap_item()
-                
-                print()
+                # Put down the None
+                self.swap_item()
 
-
-
-                # Move right, taking the largest item
+                # Move right, picking up the largest items you find
                 self.move_right()
                 if self.compare_item() < 0:
                     self.swap_item()
 
+                # When you reach the end, put largest item down and stop moving right
                 if not self.can_move_right():
-                    self.swap_item() # deposit largest item
-                    print('------- END')
-                    print(f'i: {self._position}')
-                    print(f'Robot: {self._item}')
-                    print(self._list)
-                    print()
+                    self.swap_item()
                     break
                 
-
+            # If the robot is carrying the None and is in the last cell, we're done.
             if self.compare_item() is None and not self.can_move_right():
                 break
 
 
-            # Shuffle left, taking the smallest item and depositing it at the end
+            # Shuffle left, taking the smallest item and depositing it
+            # wherever the None is
             while True:
-                print(f'i: {self._position}')
-                print(f'Robot: {self._item}')
-                print(f'Slot: {self._list[self._position]}')
-                print(self._list)
-                
-
-                # Move left, taking the smallest item
                 self.move_left()
-
+                # When the None is reached, pick it up and stop moving left
                 if self.compare_item() is None:
                     self.swap_item()
-                    print('---------- Reached None!')
-                    print(f'i: {self._position}')
-                    print(f'Robot: {self._item}')
-                    print(self._list)
-                    print()
                     break
-                
-                print()
 
+                # Until then, pick up the smallest items
                 if self.compare_item() > 0:
                     self.swap_item()
                     
-
-
+            # The robot has now put the smallest item at the position of the original None,
+            # and put the largest item at the end of the list.  The robot is carrying the None.
+            # Now the robot moves one position to the right, and we start the master loop
+            # all over again.  If the robot is already in the last cell at this point,
+            # the list is sorted.
             if not self.move_right():
-                self.set_light_off()
+                break
 
             
                 
@@ -245,7 +160,6 @@ if __name__ == "__main__":
     # with `python robot_sort.py`
 
     l = [15, 41, 58, 49, 26, 4, 28, 8, 61, 60, 65, 21, 78, 14, 35, 90, 54, 5, 0, 87, 82, 96, 43, 92, 62, 97, 69, 94, 99, 93, 76, 47, 2, 88, 51, 40, 95, 6, 23, 81, 30, 19, 25, 91, 18, 68, 71, 9, 66, 1, 45, 33, 3, 72, 16, 85, 27, 59, 64, 39, 32, 24, 38, 84, 44, 80, 11, 73, 42, 20, 10, 29, 22, 98, 17, 48, 52, 67, 53, 74, 77, 37, 63, 31, 7, 75, 36, 89, 70, 34, 79, 83, 13, 57, 86, 12, 56, 50, 55, 46]
-    # l = [5,4,3,2,1]
 
     robot = SortingRobot(l)
 
