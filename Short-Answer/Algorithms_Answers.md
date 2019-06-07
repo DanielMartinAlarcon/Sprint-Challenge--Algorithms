@@ -1,4 +1,4 @@
-# Exercise 1
+# Exercise I
 ## a)
 Time complexity is `O(n)`.
 
@@ -43,3 +43,10 @@ def bunnyEars(bunnies):
 
     return 2 + bunnyEars(bunnies-1) # This will run n times
 ```
+
+# Exercise II
+The building is an ordered list of floors, because each subsequent floor is a bit taller than the other and thus that much closer to the egg breaking height.  The egg is a variable with unknown value that fits in the ordered list, at floor f.  So this problem is about searching on an ordered list.
+
+The baseline naive solution is to go up floor by floor, dropping eggs until you find f.  The performance of that would be `O(n)`, assuming that the value of `f` is truly unknown and can be as high as the last floor of an arbitrarily tall building.  In other words, we'll have to break a number of eggs that is proportional to `n` (and `n` itself in the worst case).
+
+A better solution is a binary search.  Start at the middle of the building and drop an egg.  If it cracked, now search only in the bottom half of the building.  Otherwise, search only in the top half. Repeat that process recursively until you find f.  This process should run in `O(log(n))`, and result at most in `log(n)` cracked eggs.
