@@ -113,17 +113,45 @@ class SortingRobot:
             print('Beginning; light off')
             self.set_light_off()
 
-            # Act, then move right.  If
+
+
+
+
+            # Act, then move right.
+            # Robot will compare current and next positions, then move
+            # forward one place.
             while True:
-                # Actions at current position
-                print(self._position)
-                
-                # Move, and if you can't move break out
-                if not self.move_right():
+                # Make sure there's at least one position in front left,
+                # Otherwise break out
+                if not self.can_move_right():
+                    print("I'm at the end!")
                     break
+
+                # Evaluate items i and i+1, swap if necessary.
+                # Robot must start and end by holding the None item
+                print(f'i: {self._position}')
+                print(f'Eval: {self._list[self._position]} - {self._list[self._position+1]}')
+                
+                self.swap_item() # Put down None
+                self.move_right()
+                if self.compare_item() > 0:
+                    self.swap_item()
+                    self.set_light_on() # If swap, turn light on
+                    print('Swap!')
+                self.move_left()
+                self.swap_item() # Pick up none again
+                
+
+                # Move on
+                print()
+                self.move_right()
             
             # Actions at the end
-            print('End; Turn around')
+            print('Turn around')
+
+
+
+
 
             # Return robot to the start
             while True:
